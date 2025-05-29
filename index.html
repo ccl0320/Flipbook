@@ -1,60 +1,135 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <title>翻書效果展示</title>
-  <style>
-    body {
-      background: #f0f0f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    #flipbook {
-      width: 800px;
-      height: 600px;
-    }
-    #flipbook .page {
-      width: 100%;
-      height: 100%;
-    }
-    #flipbook img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>翻書效果網頁</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
+    
+    <style>
+        /* 基本頁面樣式 */
+        body {
+            font-family: sans-serif;
+            background-color: #f3f3f3; /* 頁面背景色 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
 
+        /* 書本容器 */
+        .flipbook-container {
+            width: 922px;  /* 這是書本展開後的寬度 */
+            height: 600px; /* 這是書本的高度 */
+        }
+        
+        #flipbook {
+            width: 922px;
+            height: 600px;
+        }
+
+        /* 每一頁的樣式 */
+        #flipbook .page {
+            width: 461px; /* 書本寬度的一半 */
+            height: 600px;
+            background-color: white;
+            line-height: 600px;
+            font-size: 20px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+
+        /* 讓圖片填滿整個頁面 */
+        #flipbook .page img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 確保圖片填滿而不變形 */
+        }
+
+        /* turn.js 會為硬封面/封底添加 'hard' class */
+        #flipbook .hard {
+            background: #ccc !important;
+            box-shadow: inset 0 0 5px #666;
+            font-weight: bold;
+        }
+        
+        /* 翻頁時的陰影效果 */
+        #flipbook .shadow,
+        #flipbook.shadow {
+            -webkit-box-shadow: 0 4px 10px #666;
+            -moz-box-shadow: 0 4px 10px #666;
+            -ms-box-shadow: 0 4px 10px #666;
+            -o-box-shadow: 0 4px 10px #666;
+            box-shadow: 0 4px 10px #666;
+        }
+
+    </style>
 </head>
 <body>
 
-  <div id="flipbook">
-    <!-- JS會自動插入頁面 -->
-  </div>
+<div class="flipbook-container">
+    <div id="flipbook">
+        <div class="hard">
+            <img src="image/page_1.jpg" alt="封面">
+        </div>
 
-  <script>
-    const flipbook = document.getElementById('flipbook');
+        <div> <img src="image/page_2.jpg" alt="Page 2"> </div>
+        <div> <img src="image/page_3.jpg" alt="Page 3"> </div>
+        <div> <img src="image/page_4.jpg" alt="Page 4"> </div>
+        <div> <img src="image/page_5.jpg" alt="Page 5"> </div>
+        <div> <img src="image/page_6.jpg" alt="Page 6"> </div>
+        <div> <img src="image/page_7.jpg" alt="Page 7"> </div>
+        <div> <img src="image/page_8.jpg" alt="Page 8"> </div>
+        <div> <img src="image/page_9.jpg" alt="Page 9"> </div>
+        <div> <img src="image/page_10.jpg" alt="Page 10"> </div>
+        <div> <img src="image/page_11.jpg" alt="Page 11"> </div>
+        <div> <img src="image/page_12.jpg" alt="Page 12"> </div>
+        
+        <div class="hard">
+             <img src="image/page_13.jpg" alt="封底">
+        </div>
+    </div>
+</div>
 
-for (let i = 1; i <= 13; i++) {
-  const page = document.createElement('div');
-  page.className = 'page';
-  const img = document.createElement('img');
-  // 修正 1: 使用模板字面量來動態設定圖片來源
-  img.src = `images/page_${i}.jpg`;
-  // 修正 2: 使用模板字面量來動態設定替代文字
-  img.alt = `page ${i}`;
-  page.appendChild(img);
-  flipbook.appendChild(page);
-}
-
-    $('#flipbook').turn({
-      width: 800,
-      height: 600,
-      autoCenter: true
+<script type="text/javascript">
+    // 當頁面載入完成後，執行此函式
+    $(document).ready(function() {
+        $('#flipbook').turn({
+            // 書本展開後的寬度
+            width: 922,
+            // 書本的高度
+            height: 600,
+            // 翻頁時的立體感，數值越大，立體感越強
+            elevation: 50,
+            // 啟用漸層陰影效果
+            gradients: true,
+            // 自動將書本置中
+            autoCenter: true,
+            // 總頁數
+            pages: 14, // 封面 + 12 內頁 + 封底 = 14 個 div
+            // 翻頁時觸發的事件
+            when: {
+                turned: function(event, page, view) {
+                    // 你可以在這裡加入翻頁時要執行的程式碼
+                    // 例如：更新頁碼顯示
+                    console.log('目前在第 ' + page + ' 頁');
+                }
+            }
+        });
     });
-  </script>
+
+    // 監聽鍵盤左右鍵來翻頁
+    $(window).on('keydown', function(e) {
+        if (e.keyCode == 37) { // 左箭頭
+            $('#flipbook').turn('previous');
+        } else if (e.keyCode == 39) { // 右箭頭
+            $('#flipbook').turn('next');
+        }
+    });
+</script>
 
 </body>
 </html>
