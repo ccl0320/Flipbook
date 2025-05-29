@@ -37,15 +37,17 @@
   <script>
     const flipbook = document.getElementById('flipbook');
 
-    for (let i = 1; i <= 13; i++) {
-      const page = document.createElement('div');
-      page.className = 'page';
-      const img = document.createElement('img');
-      img.src = "./images/page_1.jpg";
-      img.alt = "page {i}";
-      page.appendChild(img);
-      flipbook.appendChild(page);
-    }
+for (let i = 1; i <= 13; i++) {
+  const page = document.createElement('div');
+  page.className = 'page';
+  const img = document.createElement('img');
+  // 修正 1: 使用模板字面量來動態設定圖片來源
+  img.src = `images/page_${i}.jpg`;
+  // 修正 2: 使用模板字面量來動態設定替代文字
+  img.alt = `page ${i}`;
+  page.appendChild(img);
+  flipbook.appendChild(page);
+}
 
     $('#flipbook').turn({
       width: 800,
