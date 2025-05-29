@@ -1,18 +1,97 @@
 body {
-  background-color: #eaeaea;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+    margin: 0;
+    font-family: sans-serif;
+    overflow: hidden; /* 防止滾動條 */
+}
+
+.flipbook-container {
+    position: relative;
+    width: 600px; /* 書本總寬度 */
+    height: 400px; /* 書本總高度 */
+    perspective: 1500px; /* 3D 透視效果 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .flipbook {
-  width: 800px;
-  height: 600px;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d; /* 確保子元素在 3D 空間中呈現 */
 }
 
-.flipbook img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.page {
+    position: absolute;
+    width: 50%; /* 每頁是書本總寬度的一半 */
+    height: 100%;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform-origin: left center; /* 設置翻頁的軸心在左側中間 */
+    transition: transform 0.8s ease-in-out, z-index 0.8s ease-in-out; /* 翻頁動畫 */
+    backface-visibility: hidden; /* 翻轉後面的面不可見 */
+    overflow: hidden; /* 確保圖片不溢出 */
+}
+
+.page img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 圖片適應容器 */
+    display: block;
+}
+
+/* 第一頁 (封面) */
+.page:first-child {
+    z-index: 100; /* 確保封面在最上面 */
+    transform-origin: left center;
+}
+
+/* 讓所有頁面初始時都向右移動一半的書寬，形成書本的右半邊 */
+.page {
+    left: 50%; /* 讓所有頁面從書本的中間開始 */
+}
+
+/* 翻頁狀態 */
+.page.flipped {
+    transform: rotateY(-180deg); /* 翻轉 180 度 */
+    z-index: 1; /* 翻轉中的頁面降低 Z 軸，以便其他頁面能覆蓋 */
+}
+
+/* 當頁面在書本左側時的樣式調整 */
+.page.active-left {
+    transform: rotateY(0deg); /* 保持在原位 */
+    left: 0%; /* 移動到書本的左半邊 */
+    z-index: 99; /* 活躍頁面保持高 Z 軸 */
+}
+
+/* 導覽按鈕 */
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 200; /* 確保按鈕在書本上方 */
+}
+
+.nav-btn.prev {
+    left: 20px;
+}
+
+.nav-btn.next {
+    right: 20px;
+}
+
+.nav-btn:hover {
+    background-color: #0056b3;
 }
